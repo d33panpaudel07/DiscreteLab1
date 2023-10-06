@@ -48,3 +48,4 @@ int main()
 		}
 	}
 }
+/*yo code le jun pani graph lai adjacency matrix form ma store chai garna sakxa but graph properties test ko code garna baki xw confussion bhako xw sodherw garne aba*/
