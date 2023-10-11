@@ -1,51 +1,75 @@
 /*Qno1:Write a program to represent graph and test it properties. Take the graphs in
 the following figure as a sample.*/
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <queue>
+
 using namespace std;
 
-int main()
-{
-	int vertices;
-	cout<<"Enter number of vertices : ";
-	cin>>vertices;
-	int mat[vertices][vertices];
-	int i,j;
+class Graph {
+public:
+    int V;
+    vector<vector<int>> adj; 
 
+    Graph(int vertices) {
+        V = vertices;
+        adj.resize(V);
+    }
 
-	for(char x='A';x<'A'+vertices;x++){
-		j=0;
-		for(char y='A';y<'A'+vertices;y++){
-			char uin=0;
-			cout<<"Is "<<x<<" connected to "<<y<<"? (y,n) : ";
-			cin>>uin;
-			if(uin == 'y' || uin == 'Y'){
-				mat[i][j]=1;
-				j++;
-			}
-			else{
-				mat[i][j]=0;
-				j++;
-			}
-		}
-		i++;
-	}
-	for(int i=0;i<vertices;i++){
-		char point1=65+i;
-		cout<<" "<<point1;
-		if(i==vertices-1){
-			cout<<endl;
-		}
-	}
-	for(int i=0;i<vertices;i++){
-		char point2=65+i;
-		cout<<point2<<" ";
-		
-		for(int j=0;j<vertices;j++){
-			cout<<mat[i][j]<<" ";
-			if(j==vertices-1){
-				cout<<endl;
-			}
-		}
-	}
+    
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+   
+    bool isBipartite() {
+        vector<int> color(V, -1); 
+
+        for (int i = 0; i < V; i++) {
+            if (color[i] == -1) { 
+                queue<int> q;
+                q.push(i);
+                color[i] = 0; 
+                while (!q.empty()) {
+                    int u = q.front();
+                    q.pop();
+
+                    for (int v : adj[u]) {
+                        if (color[v] == -1) {
+                            color[v] = 1 - color[u]; 
+                            q.push(v);
+                        } else if (color[v] == color[u]) {
+                            return false; 
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+};
+
+int main() {
+   
+    Graph graph(5);
+
+ 
+    graph.addEdge(0, 1);
+    graph.addEdge(1, 2);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 4);
+    graph.addEdge(4, 0);
+
+  
+    bool isBipartite = graph.isBipartite();
+
+    if (isBipartite) {
+        cout << "The graph is bipartite." << endl;
+    } else {
+        cout << "The graph is not bipartite." << endl;
+    }
+
+    return 0;
 }
-/*yo code le jun pani graph lai adjacency matrix form ma store chai garna sakxa but graph properties test ko code garna baki xw confussion bhako xw sodherw garne aba*/
